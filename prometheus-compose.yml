@@ -1,0 +1,32 @@
+version: '3'
+services:
+  prometheus:
+    image: prom/prometheus
+    privileged: true
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+    ports:
+      - '9090:9090'
+    networks:
+      - monitoring
+    restart: always  
+
+  node-exporter:
+    image: prom/node-exporter
+    ports:
+      - '9100:9100'
+    networks:
+      - monitoring
+    restart: always
+    
+  alertmanager:
+    image: prom/alertmanager
+    privileged: true
+    ports:
+      - '9093:9093'
+    networks:
+    - monitoring
+    restart: always
+
+networks:
+  monitoring:
