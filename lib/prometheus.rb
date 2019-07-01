@@ -5,6 +5,7 @@
 # related to prometheus
 
 require 'yaml'
+require 'tempfile'
 
 def prom_global_config(interval: '15s', timeout: '10s', eval_int: '15s')
   {

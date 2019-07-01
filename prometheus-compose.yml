@@ -4,8 +4,8 @@ services:
     image: prom/prometheus
     privileged: true
     volumes:
-      - ./prometheus.yml:/etc/prometheus/prometheus.yml
-      - ./disk.rules:/prometheus/disk.rules
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./prometheus/disk.rules:/prometheus/disk.rules
     command:
       - '--config.file=/etc/prometheus/prometheus.yml'
     ports:
