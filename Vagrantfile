@@ -2,6 +2,8 @@
 # vi: set ft=ruby :
 
 require_relative 'lib/vagrant'
+require_relative 'lib/prometheus'
+require_relative 'lib/alerts'
 
 work_dir = File.dirname(File.expand_path(__FILE__))
 opts = vagrant_config(work_dir)
