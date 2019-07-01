@@ -5,6 +5,7 @@ require_relative 'lib/vagrant'
 
 work_dir = File.dirname(File.expand_path(__FILE__))
 opts = vagrant_config(work_dir)
+alert_template_to_file(work_dir: work_dir)
 prom_config_to_file(work_dir: work_dir)
 
 Vagrant.configure('2') do |config|

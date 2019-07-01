@@ -16,5 +16,6 @@ provisioner:
     run: 'always'
 forwarded_ports:
   - 9090
+  - 9100
   - 9093
   - 3000

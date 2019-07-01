@@ -55,9 +55,11 @@ def prom_config_builder
   {
     'global' => prom_global_config,
     'alerting' => prom_alerting_config,
+    'rule_files' => ['/prometheus/disk.rules'],
     'scrape_configs' => [
       prom_job('prometheus', 9090),
-      prom_job('node-exporter', 9100)
+      prom_job('node-exporter', 9100),
+      prom_job('grafana', 3000)
     ]
   }
 end
@@ -68,4 +70,47 @@ end
 
 def prom_config_to_file(work_dir: Dir.pwd, file_name: 'prometheus', file_ext: 'yml')
   File.open("#{work_dir}/#{file_name}.#{file_ext}", 'w') { |file| file.write(prom_config_to_yaml) }
+end
+
+def free_disk_space_alert
+  {
+    group_name: 'disk', 
+    alert_name: 'FreeDiskSpaceLessThan50Persent',
+    expr: '100.0 - 100 * (node_filesystem_avail_bytes / node_filesystem_size_bytes) >= 50', 
+    interval: '15m',
+    severity: 'warning',
+    summary: 'Free Disk Space on {{ $labels.mountpoint }} is below threshold of 50%'    
+  }
+end
+
+def alert_template(alert)
+  {
+    'groups' => [
+      {
+        'name' => alert[:group_name],
+        'rules' => [
+          {
+            'alert' => alert[:alert_name],
+            'expr' => alert[:expr],
+            'for' => alert[:interval],
+            'labels' => {
+              'severity' => alert[:severity]
+            },
+            'annotations' => {
+              'summary' => alert[:summary]
+            }
+          }
+        ]
+      }
+    ]
+  }
+end
+
+def alert_template_to_yaml
+  disk_alert = free_disk_space_alert
+  alert_template(disk_alert).to_yaml
+end
+
+def alert_template_to_file(work_dir: Dir.pwd, file_name: 'disk', file_ext: 'rules')
+  File.open("#{work_dir}/#{file_name}.#{file_ext}", 'w') { |file| file.write(alert_template_to_yaml) }
 end
