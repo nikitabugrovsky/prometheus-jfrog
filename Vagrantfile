@@ -10,12 +10,14 @@ work_dir = File.dirname(File.expand_path(__FILE__))
 opts = vagrant_config(work_dir)
 dirs = []
 dirs << "#{work_dir}/prometheus"
-dirs << "#{work_dir}/grafana"
+dirs << "#{work_dir}/grafana/provisioning/datasources"
+dirs << "#{work_dir}/grafana/provisioning/dashboards"
 dirs.each do |d|
-  Dir.mkdir(d) unless File.exists?(d)
+  FileUtils.mkdir_p(d) unless File.exists?(d)
 end
 alert_template_to_file(work_dir: dirs[0])
 prom_config_to_file(work_dir: dirs[0])
+datasource_config_to_file(work_dir: dirs[1])
 
 Vagrant.configure('2') do |config|
   config.vm.define opts['provider']['virtualbox']['vm']['hostname'] do |cfg|
