@@ -37,6 +37,8 @@ services:
       - prometheus
     ports:
       - '3000:3000'
+    environment:
+      - GF_INSTALL_PLUGINS=camptocamp-prometheus-alertmanager-datasource
     networks:
       - monitoring
     restart: always
