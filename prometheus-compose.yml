@@ -5,7 +5,7 @@ services:
     privileged: true
     volumes:
       - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
-      - ./prometheus/disk.rules:/prometheus/disk.rules
+      - ./prometheus/disk.rules:/etc/prometheus/disk.rules
     command:
       - '--config.file=/etc/prometheus/prometheus.yml'
     ports:

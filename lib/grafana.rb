@@ -48,6 +48,7 @@ def ds_provider_to_yml(api_version: 1, ds_list: [])
 end
 
 def ds_provision_config_to_file(work_dir: Dir.pwd, file_name: 'datasources', file_ext: 'yml')
+  puts "Generating Datasource Provisioning Configuration File: #{work_dir}/#{file_name}.#{file_ext}"
   File.open("#{work_dir}/#{file_name}.#{file_ext}", 'w') { |file| file.write(ds_provider_to_yml) }
 end
 
@@ -86,5 +87,6 @@ def dash_provider_to_yml(api_version: 1, providers: [])
 end
 
 def dash_provision_config_to_file(work_dir: Dir.pwd, file_name: 'dashboards', file_ext: 'yml')
+  puts "Generating Dashboard Provisioning Configuration File: #{work_dir}/#{file_name}.#{file_ext}"
   File.open("#{work_dir}/#{file_name}.#{file_ext}", 'w') { |file| file.write(dash_provider_to_yml) }
 end

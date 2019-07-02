@@ -46,5 +46,6 @@ def alert_template_to_yaml
 end
 
 def alert_template_to_file(work_dir: Dir.pwd, file_name: 'disk', file_ext: 'rules')
+  puts "Generating Alerts File: #{work_dir}/#{file_name}.#{file_ext}"
   File.open("#{work_dir}/#{file_name}.#{file_ext}", 'w') { |file| file.write(alert_template_to_yaml) }
 end

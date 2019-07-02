@@ -5,7 +5,6 @@
 # related to prometheus
 
 require 'yaml'
-require 'tempfile'
 
 def prom_global_config(interval: '15s', timeout: '10s', eval_int: '15s')
   {
@@ -47,7 +46,7 @@ def prom_config_builder
   {
     'global' => prom_global_config,
     'alerting' => prom_alerting_config,
-    'rule_files' => ['/prometheus/disk.rules'],
+    'rule_files' => ['/etc/prometheus/disk.rules'],
     'scrape_configs' => [
       prom_job('prometheus', 9090),
       prom_job('node-exporter', 9100),
@@ -61,5 +60,6 @@ def prom_config_to_yaml
 end
 
 def prom_config_to_file(work_dir: Dir.pwd, file_name: 'prometheus', file_ext: 'yml')
+  puts "Generating Prometheus Configuration File: #{work_dir}/#{file_name}.#{file_ext}"
   File.open("#{work_dir}/#{file_name}.#{file_ext}", 'w') { |file| file.write(prom_config_to_yaml) }
 end

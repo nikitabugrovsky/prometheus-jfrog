@@ -5,21 +5,35 @@ require_relative 'lib/vagrant'
 require_relative 'lib/prometheus'
 require_relative 'lib/alerts'
 require_relative 'lib/grafana'
+require_relative 'lib/dashboard'
 
-work_dir = File.dirname(File.expand_path(__FILE__))
+base_dir = File.dirname(File.expand_path(__FILE__))
 opts = vagrant_config(work_dir)
-dirs = []
-dirs << "#{work_dir}/prometheus"
-dirs << "#{work_dir}/grafana/provisioning/datasources"
-dirs << "#{work_dir}/grafana/provisioning/dashboards"
-dirs << "#{work_dir}/grafana/templates"
-dirs.each do |d|
-  FileUtils.mkdir_p(d) unless File.exists?(d)
+
+case ARGV[0]
+when 'provision', 'up'
+  # config generators
+  dirs = []
+  dirs << "#{base_dir}/prometheus"
+  dirs << "#{base_dir}/grafana/provisioning/datasources"
+  dirs << "#{base_dir}/grafana/provisioning/dashboards"
+  dirs << "#{base_dir}/grafana/dashboards"
+  dirs.each do |d|
+    puts "Creating Dir: #{d}"
+    FileUtils.mkdir_p(d) unless File.exists?(d)
+  end
+  alert_template_to_file(work_dir: dirs[0])
+  prom_config_to_file(work_dir: dirs[0])
+  ds_provision_config_to_file(work_dir: dirs[1])
+  dash_provision_config_to_file(work_dir: dirs[2])
+  dash_to_json_file(work_dir: dirs[3], file_name: 'disk_alerts')
+when 'halt', 'destroy'
+  puts 'Skipping Generators Phaze'
+  puts 'Cleaning up Configurations'
+  %w(prometheus grafana).each do |d|
+    FileUtils.rm_rf(d) if File.exists?(d)
+  end
 end
-alert_template_to_file(work_dir: dirs[0])
-prom_config_to_file(work_dir: dirs[0])
-ds_provision_config_to_file(work_dir: dirs[1])
-dash_provision_config_to_file(work_dir: dirs[2])
 
 Vagrant.configure('2') do |config|
   config.vm.define opts['provider']['virtualbox']['vm']['hostname'] do |cfg|
