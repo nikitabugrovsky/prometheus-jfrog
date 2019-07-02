@@ -39,7 +39,7 @@ def datasource_tmpl(opts)
   }.merge({'jsonData' => opts[:jsonData]}) if opts[:jsonData]
 end
 
-def datasource_to_yml(api_version: 1, ds_list: [])
+def ds_provider_to_yml(api_version: 1, ds_list: [])
   ds_list << datasource_tmpl(alertmanager_opts)
   {
     'apiVersion' => api_version,
@@ -47,6 +47,44 @@ def datasource_to_yml(api_version: 1, ds_list: [])
   }.to_yaml
 end
 
-def datasource_config_to_file(work_dir: Dir.pwd, file_name: 'datasource', file_ext: 'yml')
-  File.open("#{work_dir}/#{file_name}.#{file_ext}", 'w') { |file| file.write(datasource_to_yml) }
+def ds_provision_config_to_file(work_dir: Dir.pwd, file_name: 'datasources', file_ext: 'yml')
+  File.open("#{work_dir}/#{file_name}.#{file_ext}", 'w') { |file| file.write(ds_provider_to_yml) }
+end
+
+def dash_provider_opts
+{
+  name: 'Jfrog Dashboards',
+  type: 'file',
+  orgId: 1,
+  folder: '',
+  disableDeletion: true,
+  updateIntervalSeconds: 10,
+  path: '/var/lib/grafana/dashboards'
+}
+end
+
+def provider_tmpl(opts)
+  {
+    'name' => opts[:name],
+    'type' => opts[:type],
+    'orgId' => opts[:orgId],
+    'folder' => opts[:folder],
+    'disableDeletion' => opts[:disableDeletion],
+    'updateIntervalSeconds' => opts[:updateIntervalSeconds],
+    'options' => {
+      'path' => opts[:path]
+    }
+  }
+end
+
+def dash_provider_to_yml(api_version: 1, providers: [])
+  providers << provider_tmpl(dash_provider_opts)
+  {
+    'apiVersion' => api_version,
+    'providers' => providers
+  }.to_yaml
+end
+
+def dash_provision_config_to_file(work_dir: Dir.pwd, file_name: 'dashboards', file_ext: 'yml')
+  File.open("#{work_dir}/#{file_name}.#{file_ext}", 'w') { |file| file.write(dash_provider_to_yml) }
 end

@@ -10,9 +10,9 @@ def free_disk_space_alert
   {
     group_name: 'disk', 
     alert_name: 'FreeDiskSpaceLessThan50Persent',
-    expr: '100.0 - 100 * (node_filesystem_avail_bytes / node_filesystem_size_bytes) >= 50', 
-    interval: '15m',
-    severity: 'warning',
+    expr: '100.0 - 100 * (node_filesystem_avail_bytes / node_filesystem_size_bytes) <= 50', 
+    interval: '1m',
+    severity: '2',
     summary: 'Free Disk Space on {{ $labels.mountpoint }} is below threshold of 50%'    
   }
 end

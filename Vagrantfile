@@ -12,12 +12,14 @@ dirs = []
 dirs << "#{work_dir}/prometheus"
 dirs << "#{work_dir}/grafana/provisioning/datasources"
 dirs << "#{work_dir}/grafana/provisioning/dashboards"
+dirs << "#{work_dir}/grafana/templates"
 dirs.each do |d|
   FileUtils.mkdir_p(d) unless File.exists?(d)
 end
 alert_template_to_file(work_dir: dirs[0])
 prom_config_to_file(work_dir: dirs[0])
-datasource_config_to_file(work_dir: dirs[1])
+ds_provision_config_to_file(work_dir: dirs[1])
+dash_provision_config_to_file(work_dir: dirs[2])
 
 Vagrant.configure('2') do |config|
   config.vm.define opts['provider']['virtualbox']['vm']['hostname'] do |cfg|
