@@ -24,13 +24,13 @@ Requirements
 -------------
 
 Provide a Vagrantfile, based on Virtual box which:
-  [x] Start a Linux server
-  [x] Install Docker daemon
-  [x] Prometheus with Alertmanager as docker flavor
-  [x] Deploy node exporter
-  [x] Grafana as a dashboard to Prometheus 
-  [x] Add Alert for having less than 50% free disk space, 
-  [x] and this should be displayed on Grafana
+  - [x] Start a Linux server
+  - [x] Install Docker daemon
+  - [x] Prometheus with Alertmanager as docker flavor
+  - [x] Deploy node exporter
+  - [x] Grafana as a dashboard to Prometheus 
+  - [x] Add Alert for having less than 50% free disk space, 
+  - [x] and this should be displayed on Grafana
 
 Versions Tested
 ----------------
