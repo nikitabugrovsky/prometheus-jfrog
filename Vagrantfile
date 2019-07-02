@@ -8,7 +8,7 @@ require_relative 'lib/grafana'
 require_relative 'lib/dashboard'
 
 base_dir = File.dirname(File.expand_path(__FILE__))
-opts = vagrant_config(work_dir)
+opts = vagrant_config(base_dir)
 
 case ARGV[0]
 when 'provision', 'up'
